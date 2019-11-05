@@ -1,0 +1,35 @@
+---------- CASO DE PRUEBA ----------
+--- JUEGO 2D ---
+- El usuario podrá acceder a las opciones de volumen para graduarlo al gusto.
+- El usuario podrá seleccionar uno de entre varios personajes con los que desarrollar la experiencia del videojuego.
+- El usuario podrá acceder al menú de volumen y silenciar o activar el sonido del juego.
+
+
+
+----------HISTORIA DE USUARIO----------
+--- Carrera de autos ---
+Yo como usuario ( ROL ) deseo divertirme y poder modificar el auto con el que estare desarrollando mis partidas en el juego.
+
+CRITERIOS DE ACEPTACION
+
+- Se almacenarán los ultimos 20 mejores score.
+- Se aceptarán archivos de sonido tipo mp3 y mp4.
+- Se aceptarán archivos de sonido de un máximo de 3 mb.
+
+
+
+
+---------- GERKHIN ----------
+--- Puzzle ---
+Deseo poder utilizar imagenes de mi galeria, para cargarlas como puzzles en la aplicacion.
+
+Given Usuario autenticado con el uso del chat
+And la cuenta no ha sido baneada
+And el juego sí funciona
+When entra a la pantalla principal
+Then elige la opción "Cargar Imagen"
+Then slecciona la imagen
+Then el juego comienza
+
+
+
