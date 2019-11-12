@@ -1,0 +1,4 @@
+4,marco,900,bio,mont
+3,camila,999,bio,mont
+2,piki,999,mat,mont
+1,juan,900,matematica,neper
