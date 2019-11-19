@@ -1,0 +1,4 @@
+1,Neper,700,norte
+2,catolico,700,sur
+3,san gabriel,800,america
+4,montufar,800,centro
