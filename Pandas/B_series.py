@@ -152,6 +152,57 @@ ciudades_uno.sort_values(
 ciudades_uno.sort_values().tail(2)
 
 
+# 0 - 1000 subir un 5%
+# 1001 - 5000 subir un 10%
+# 5001 - 20000 subir 15%
+#FUNCIONES
+    
+def calculo(valor):
+    if(valor <= 1000):
+        return valor * 1.05
+    if(valor > 1000 and valor <= 5000):
+        return valor * 1.10
+    if(valor > 5000):
+        return valor * 1.15
+
+
+ciudad_calculada = ciudades_uno.map(calculo)
+    
+ciudades_uno
+ciudad_calculada
+
+
+# FUNCION WHERE
+# se le pasa el valor para cada iteracion, en este caso se utiliza la variable ciudades_uno
+# se aplica a los que NO CUMPLEN la condicion
+ciudades_uno.where(ciudades_uno > 1000, ciudades_uno * 1.05)
+
+ciudades_uno.where(ciudades_uno < 5000, ciudades_uno * 1.15)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
