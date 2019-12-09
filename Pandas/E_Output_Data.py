@@ -52,6 +52,7 @@ writer.save();
 
 
 
+
 ###  Multiples hojas de trabajo ###
 # contar artistas
 num_artistas = df['artist'].value_counts()
@@ -76,7 +77,7 @@ rango_celdas = 'B2:B{}'.format(len(num_artistas.index) + 1)
 
 
 formato_artistas = {
-        "type": "2_color_scale",
+        "type": "3_color_scale",
         "min_value": "10",
         "min_type": "percentile",
         "max_value": "99",
@@ -90,16 +91,32 @@ hoja_artistas.conditional_format(rango_celdas,
 writer.save()
 
 
+# import xlsxwriter
+
 #GRAFICOS
-##chart.add_series({
- #       'values':'Sheet1!$A$1:$A$6',
-  #      'maker':{
-   #             'type':'square',
-    #            'size':8,
-     #           'border': {'color':'black'},
-      #          'fill': {'color':'red'},
-       #         },
-        #    })
+"""
+import xlsxwriter
+
+workbook = xlsxwriter.Workbook('C://Users//juanc//source//repos//Python//Pandas//data//mi_df_colores.xlsx')
+
+chart = workbook.add_chart({"type":"line"})
+chart.add_series({
+        'values':'Artistas!$A$1:$A$6',
+        'maker':{
+                'type':'square',
+                'size':8,
+                'border': {'color':'black'},
+                'fill': {'color':'red'},
+                },
+            })
+
+workbook.close()
+
+#Graficos
+
+
+"""
+
 
 
 
