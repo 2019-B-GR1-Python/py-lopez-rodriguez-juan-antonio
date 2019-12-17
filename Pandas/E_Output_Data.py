@@ -117,6 +117,45 @@ workbook.close()
 
 """
 
+####################### SQL ############################################
+##### IMPORTAR Y EXPORTAR ARCHIVOS SQL CON DBEAVER #####################
+
+with sqlite3.connect("bdd_artist.db") as conexion:
+    df5.to_sql('py_artistas', conexion)
+    
+## with mysql.connect('mysql://user:password@ip:pu')
+##  df5.to_sql('tabla_mysql', conexion)
+
+
+
+
+############################### JASON ###############################
+
+df.to_json('artistas.json')
+
+
+
+df.to_json('artistas_tabla.json', orient = 'table')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
