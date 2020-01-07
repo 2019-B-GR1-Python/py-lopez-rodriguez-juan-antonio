@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /* ID 
+        # + nombreId
+        */
+        #titulo-uno{
+            background-color: red;
+        }
+
+        /* NOMBRE-ETIQUETA
+        nombre-etiqueta
+         */
+        p{
+            color: white;
+            background-color: black;
+        }
+        body{
+            background-color: tomato;
+        }
+
+        /* Clases 
+        . + nombre-clase
+        */
+        .texto-amarillo{
+            color:yellow;
+        }
+        
+        .texto-azul{
+            color: blue;
+        }
+        .texto-cafe{
+            color:brown;
+        }
+
+        .fondo-verde{
+            background-color: green;
+        }
+
+        /* 
+        JERARQUIA
+            Style es mas importante, NUNCA DEBE USARSE
+            ID > Clase > Etiqueta
+            ultimo definido > anterior definido
+        */
+
+        /* Etiqueta dentro de otra */
+        /* si dentro del body exite un ul con un li y dentro existe p (parrafo) aplica el formato */
+        
+        body > ul > li > p {
+            background-color: coral;
+            color:darkgrey;
+        }
+
+        /* en un li (list item) que tenga un parrafo con el color texto-amarillo, que aplique el color definido */
+        li > p.texto-amarillo {
+            color:fuchsia;
+        }
+
+        p.texto-azul.texto-amarillo.texto-cafe.texto-blanco{
+            color: pink;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <h1 class="texto-amarillo">Titulo</h1>
+    <p 
+        class="fondo-verde"
+        style="background-color:indigo;" > 
+        Mi mama 
+         
+
+    </p>
+
+    <p class="texto-azul texto-cafe texto-amarillo texto-blanco" > 
+        me mima 
+    </p>
+    
+    <ul>
+        <li>
+            <p>Muy</p>
+            </li>
+            <li>
+            <p>Buenos</p>
+            </li>
+            <li>
+            <p class="texto-amarillo">Dias</p>
+            </li>
+        </ul>
+
+
+
+    <style>
+        .texto-blanco{
+            color:white;
+        }
+        </style>
+
+</body>
+</html>
