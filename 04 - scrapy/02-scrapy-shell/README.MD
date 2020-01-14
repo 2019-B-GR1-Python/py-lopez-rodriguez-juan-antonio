@@ -82,6 +82,56 @@ Extraer solo los links de los autores (about)
 $ len(response.css('div.quote > span > a::attr(href)').extract())
 ```
 
+`SEGUNDA CLASE`
+XPATH permite realizar lo que ya conocemos de forma diferente y mas simple
+```
+$ response.xpath('//title').extract()
+
+$ response.css('.row > div > div:nth-child(2) > .text::text').extract()
+
+$ response.xpath("/html/body/div/div[2]/div[2]/h2").extract()
+
+$ response.xpath("/html/body/div/div[2]/div[2]/h2/text()").extract()
+
+$ response.xpath("//div[@class='quote']").extract_first()
+
+$ response.xpath("//div[@class='quote']/span[@class='text']/text()").extract_first()
+
+```
+
+Obtner el link de author
+```
+$ response.xpath("//div[@class='quote']/span/a/@href").extract_first()
+
+```
+
+`NOTA DEL INGE`
+```
+$ response.xpath('/html/head/title').extract()
+$ response.xpath('//title').extract()
+$ response.xpath('/html/body/div/div[2]/div[2]/h2').extract()
+$ response.xpath('/html/body/div/div[2]/div[2]/h2').extract()
+$ response.xpath("//div[@class='quote']/span[@class='text']").extract_first()
+$ response.xpath("//div[@class='quote']/span[@class='text']/text()").extract_first()
+$ //div[@class='quote']/span/a/@href").extract_first()
+
+```
+
+## scrapy startproject `Nombre_proyecto`
+ 
+```
+$ scrapy shell http://books.toscrape.com/
+$ scrapy startproject arania_basica
+
+$ scrapy crawl introduccion_spider
+```
+
+Para crawling se practica con:
+`http://books.toscrape.com/`
+
+
+
+
 
 
 
