@@ -3,7 +3,7 @@ import scrapy
 class IntroSpider(scrapy.Spider):
     name = 'introduccion_spider'
 
-    urls = ['http://books.toscrape.com/catalogue/category/books/travel_2/index.html','http://books.toscrape.com/catalogue/category/books/mystery_3/index.html',
+    urls = ['http://books.toscrape.com/catalogue/category/books/travel_2/index.html', 'http://books.toscrape.com/catalogue/category/books/mystery_3/page-2.html','http://books.toscrape.com/catalogue/category/books/mystery_3/index.html',
 'http://books.toscrape.com/catalogue/category/books/historical-fiction_4/index.html','http://books.toscrape.com/catalogue/category/books/sequential-art_5/index.html',
 'http://books.toscrape.com/catalogue/category/books/classics_6/index.html','http://books.toscrape.com/catalogue/category/books/philosophy_7/index.html','http://books.toscrape.com/catalogue/category/books/romance_8/index.html',
 'http://books.toscrape.com/catalogue/category/books/womens-fiction_9/index.html','http://books.toscrape.com/catalogue/category/books/fiction_10/index.html',
@@ -22,7 +22,7 @@ class IntroSpider(scrapy.Spider):
 'http://books.toscrape.com/catalogue/category/books/academic_40/index.html','http://books.toscrape.com/catalogue/category/books/self-help_41/index.html','http://books.toscrape.com/catalogue/category/books/historical_42/index.html',
 'http://books.toscrape.com/catalogue/category/books/christian_43/index.html','http://books.toscrape.com/catalogue/category/books/suspense_44/index.html',
 'http://books.toscrape.com/catalogue/category/books/short-stories_45/index.html','http://books.toscrape.com/catalogue/category/books/novels_46/index.html','http://books.toscrape.com/catalogue/category/books/health_47/index.html',
-'http://books.toscrape.com/catalogue/category/books/politics_48/index.html','http://books.toscrape.com/catalogue/category/books/cultural_49/index.html','http://books.toscrape.com/catalogue/category/books/erotica_50/index.html','http://books.toscrape.com/catalogue/category/books/crime_51/index.html']
+'http://books.toscrape.com/catalogue/category/books/politics_48/index.html','http://books.toscrape.com/catalogue/category/books/cultural_49/index.html','http://books.toscrape.com/catalogue/category/books/erotica_50/index.html','http://books.toscrape.com/catalogue/category/books/crime_51/index.html', 'http://books.toscrape.com/catalogue/category/books/historical-fiction_4/page-2.html','http://books.toscrape.com/catalogue/category/books/sequential-art_5/page-2.html','http://books.toscrape.com/catalogue/category/books/sequential-art_5/page-3.html','http://books.toscrape.com/catalogue/category/books/sequential-art_5/page-4.html','http://books.toscrape.com/catalogue/category/books/romance_8/page-2.html','http://books.toscrape.com/catalogue/category/books/fiction_10/page-2.html','http://books.toscrape.com/catalogue/category/books/fiction_10/page-3.html','http://books.toscrape.com/catalogue/category/books/fiction_10/page-4.html']
         
     def start_requests(self):
         for url in self.urls:

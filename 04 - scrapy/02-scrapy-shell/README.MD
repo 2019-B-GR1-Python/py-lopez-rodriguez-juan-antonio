@@ -1,5 +1,5 @@
 # Scrapy
-## Scrapy intlacion
+## Scrapy instlacion
 
 ## Ejecutar dentro del `Anaconda prompt`
 ```
