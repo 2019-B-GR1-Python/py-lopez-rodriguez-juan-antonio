@@ -4,11 +4,13 @@ from random import randint
 
 pygame.init()
 ventana = pygame.display.set_mode((1000,600))
-pygame.display.set_caption("Mi Proyecto") 
+pygame.display.set_caption("Sobrevive y explora") 
 
 Mi_imagen = pygame.image.load("Imagenes/darkGenne2.png")
 Mi_imagen = pygame.transform.scale(Mi_imagen, (120,140))
 Imagen_fondo = pygame.image.load("Imagenes/Fondo_bosque_magico.png")
+Fuente = pygame.font.SysFont(None, 30)  # para mostrar el tiempo
+aux = 1 
 
 posX = 200
 posY = 400
@@ -57,6 +59,15 @@ while True:
         else:
             derecha=True
 
+    # Contador
+    Tiempo = pygame.time.get_ticks()/1000
+    Tiempo = int(Tiempo)
+    if aux == 1:
+        aux+=1
+        
+    contador = Fuente.render("Puntos:"+str(Tiempo),0,(120,70,0))
+    ventana.blit(contador,(30,30))
+    
     """
 
     # Movimiento teclado
