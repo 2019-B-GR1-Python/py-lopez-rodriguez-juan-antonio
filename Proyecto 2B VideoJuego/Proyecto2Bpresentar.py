@@ -5,7 +5,7 @@ from random import randint
 #variables globales
 ancho = 1000
 alto = 600
-
+lista_enemigos = []
 
 class personajePrincipal(pygame.sprite.Sprite):
     """Clase para el jugador principal"""
@@ -78,15 +78,15 @@ class Proyectil(pygame.sprite.Sprite):
         superficie.blit(self.imagenProyectil, self.rect)
 
 
-
 class Invasor(pygame.sprite.Sprite):
-    def __init__(self, posx, posy):
+    def __init__(self, posx, posy, distancia, imagenUno, imagenDos):
         pygame.sprite.Sprite.__init__(self)
 
-        self.imagenVampiroA = pygame.image.load("Imagenes/vampiroA.png")
+        self.imagenVampiroA = pygame.image.load(imagenUno)
         self.imagenVampiroA = pygame.transform.scale(self.imagenVampiroA, (180,140))
         #segundo sprite para animar
-        self.imagenVampiroB = pygame.image.load("Imagenes/vampiroB.png")
+        #self.imagenVampiroB = pygame.image.load("Imagenes/vampiroB.png")
+        self.imagenVampiroB = pygame.image.load(imagenDos)
         self.imagenVampiroB = pygame.transform.scale(self.imagenVampiroB, (180,140))
         
 
@@ -97,7 +97,7 @@ class Invasor(pygame.sprite.Sprite):
         self.rect = self.imagenInvasor.get_rect()
 
         self.listaDisparo = []
-        self.velocidad = 7
+        self.velocidad = 3
 
         self.rect.top= posy
         self.rect.left = posx
@@ -108,6 +108,9 @@ class Invasor(pygame.sprite.Sprite):
         self.derecha = True
         self.contador = 0   #Controlar movimiento derecha izquierda y descenso
         self.Maxdescenso = self.rect.top + 20
+
+        self.limiteDerecha = posx + distancia
+        self.limiteIzquierda = posx - distancia
 
     
 
@@ -128,7 +131,7 @@ class Invasor(pygame.sprite.Sprite):
                 self.posImagen = 0
 
     def __movimientos(self):
-        if self.contador <3:
+        if self.contador <2: # numero de choques antes de descender
             self.__movimientoLateral()
         else:
             self.__descenso()
@@ -143,12 +146,12 @@ class Invasor(pygame.sprite.Sprite):
     def __movimientoLateral(self):
         if self.derecha == True:
             self.rect.left = self.rect.left + self.velocidad
-            if self.rect.left>800:
+            if self.rect.left>self.limiteDerecha:
                 self.derecha=False
                 self.contador+=1
         else:
             self.rect.left = self.rect.left - self.velocidad
-            if self.rect.left < 0:
+            if self.rect.left < self.limiteIzquierda:
                 self.derecha = True
             
 
@@ -164,6 +167,19 @@ class Invasor(pygame.sprite.Sprite):
         self.listaDisparo.append(miProyectil)
 
 
+def cargarEnemigos():
+    enemigo = Invasor(100,0,100, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
+    lista_enemigos.append(enemigo)
+    enemigo = Invasor(250,0,100, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
+    lista_enemigos.append(enemigo)
+    enemigo = Invasor(400,0,100, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
+    lista_enemigos.append(enemigo)
+    enemigo = Invasor(550,0,100, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
+    lista_enemigos.append(enemigo)
+    enemigo = Invasor(700,0,100, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
+    lista_enemigos.append(enemigo)
+
+
 def Sobrevive_y_explora():
     pygame.init()
     ventana = pygame.display.set_mode((ancho,alto))
@@ -171,7 +187,7 @@ def Sobrevive_y_explora():
     Imagen_fondo = pygame.image.load("Imagenes/Fondo_bosque_magico.png")
 
     jugador = personajePrincipal()
-    enemigo = Invasor(100,25)
+    cargarEnemigos()
 
     enJuego = True
 
@@ -211,13 +227,10 @@ def Sobrevive_y_explora():
         
         ventana.blit(Imagen_fondo,(0,0))
         
-        enemigo.comportamiento(tiempo)
-
         jugador.dibujar(ventana)
-        enemigo.dibujar(ventana)
 
         
-        if len(jugador.listaDisparo)>0:
+        if len(jugador.listaDisparo) > 0:
             for x in jugador.listaDisparo:
                 x.dibujarDisparo(ventana)
                 x.trayectoria()
@@ -225,14 +238,18 @@ def Sobrevive_y_explora():
                 if x.rect.top < -300:
                     jugador.listaDisparo.remove(x)
 
+        if len(lista_enemigos)>0:
+            for enemigo in lista_enemigos:
+                enemigo.comportamiento(tiempo)
+                enemigo.dibujar(ventana)
 
-        if len(enemigo.listaDisparo)>0:
-            for x in enemigo.listaDisparo:
-                x.dibujarDisparo(ventana)
-                x.trayectoria()
+                if len(enemigo.listaDisparo)>0:
+                    for x in enemigo.listaDisparo:
+                        x.dibujarDisparo(ventana)
+                        x.trayectoria()
 
-                if x.rect.top>300:
-                    enemigo.listaDisparo.remove(x)
+                        if x.rect.top>300:
+                            enemigo.listaDisparo.remove(x)
                     
 
         pygame.display.update()
