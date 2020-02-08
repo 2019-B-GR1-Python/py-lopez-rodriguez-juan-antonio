@@ -1,5 +1,6 @@
 import pygame,sys
 from pygame.locals import *
+import time
 
 from random import randint
 #variables globales
@@ -21,7 +22,11 @@ class personajePrincipal(pygame.sprite.Sprite):
         self.listaDisparo = []
         self.Vida = True
 
-        self.velocidad = 15
+        self.velocidad = 10
+
+        self.sonidoDisparo = pygame.mixer.Sound("Sonidos/266168__plasterbrain__shooting-star-2.wav")
+        self.sonidoMuerte = pygame.mixer.Sound("Sonidos/142610__autistic-lucario__wizard-eye.wav")
+
 
         #print(self.rect)
 
@@ -41,15 +46,19 @@ class personajePrincipal(pygame.sprite.Sprite):
                 self.rect.right = 930
 
     def disparar(self,x,y):
-        miProyectil = Proyectil(x,y, "Imagenes/disparogenne.png", True)
+        miProyectil = Proyectil(x+160,y+280, "Imagenes/disparogenne.png", True)
         self.listaDisparo.append(miProyectil)
+        self.sonidoDisparo.play()
 
-    def dispararSuperPoder(self,x,y):
-        miProyectil = Proyectil(x,y, "Imagenes/darkGenneRRRulti.png", True)
-        self.listaDisparo.append(miProyectil)
 
     def dibujar(self, superficie):
         superficie.blit(self.ImagenPersonajePrincipal, self.rect)
+
+    def destruccion(self):
+        self.sonidoMuerte.play()
+        self.Vida = False
+        self.velocidad = 0
+        
 
 
 class Proyectil(pygame.sprite.Sprite):
@@ -57,10 +66,10 @@ class Proyectil(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.imagenProyectil = pygame.image.load(ruta)
-        self.imagenProyectil = pygame.transform.scale(self.imagenProyectil, (400,560))
+        self.imagenProyectil = pygame.transform.scale(self.imagenProyectil, (70,100))
         self.rect = self.imagenProyectil.get_rect()
 
-        self.velocidad_disparo = 10
+        self.velocidad_disparo = 4
 
         self.rect.top= posy
         self.rect.left = posx
@@ -97,13 +106,15 @@ class Invasor(pygame.sprite.Sprite):
         self.rect = self.imagenInvasor.get_rect()
 
         self.listaDisparo = []
-        self.velocidad = 3
+        self.velocidad = 2
 
         self.rect.top= posy
         self.rect.left = posx
         
-        self.rangoDisparo = 2 #controla la frecuencia de disparos
+        self.rangoDisparo = 1 #controla la frecuencia de disparos
         self.tiempoCambio=1 # cambio de sprite
+
+        self.conquista = False
         
         self.derecha = True
         self.contador = 0   #Controlar movimiento derecha izquierda y descenso
@@ -120,18 +131,19 @@ class Invasor(pygame.sprite.Sprite):
         
 
     def comportamiento(self, tiempo):
-        self.__movimientos()
-        
-        self.__ataque()
-        if self.tiempoCambio == tiempo:
-            self.posImagen +=1 
-            self.tiempoCambio +=1 
+        if self.conquista == False:
+            self.__movimientos()
+            
+            self.__ataque()
+            if self.tiempoCambio == tiempo:
+                self.posImagen +=1 
+                self.tiempoCambio +=1 
 
-            if self.posImagen > len(self.listaImagenes) -1:
-                self.posImagen = 0
+                if self.posImagen > len(self.listaImagenes) -1:
+                    self.posImagen = 0
 
     def __movimientos(self):
-        if self.contador <2: # numero de choques antes de descender
+        if self.contador <3: # numero de choques antes de descender
             self.__movimientoLateral()
         else:
             self.__descenso()
@@ -158,26 +170,41 @@ class Invasor(pygame.sprite.Sprite):
 
     
     def __ataque(self):
-        if (randint(0,100)<self.rangoDisparo):
+        if (randint(0,285)<self.rangoDisparo): #rango random de disparo
             self.__disparo()
 
     def __disparo(self):
         x,y = self.rect.center
-        miProyectil = Proyectil(x-205,y-235, "Imagenes/EspadaEmbrujadaProyectil.png", False)
+        miProyectil = Proyectil(x-60,y-25, "Imagenes/EspadaEmbrujadaProyectil.png", False)
         self.listaDisparo.append(miProyectil)
 
 
+def detenerTodo():
+    for enemigo in lista_enemigos:
+        for disparo in enemigo.listaDisparo:
+            enemigo.listaDisparo.remove(disparo)
+    
+    enemigo.conquista = True
+
+
+
+
 def cargarEnemigos():
-    enemigo = Invasor(100,0,100, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
-    lista_enemigos.append(enemigo)
-    enemigo = Invasor(250,0,100, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
-    lista_enemigos.append(enemigo)
-    enemigo = Invasor(400,0,100, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
-    lista_enemigos.append(enemigo)
-    enemigo = Invasor(550,0,100, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
-    lista_enemigos.append(enemigo)
-    enemigo = Invasor(700,0,100, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
-    lista_enemigos.append(enemigo)
+    
+    posx=100
+    for x in range(1,5):
+        enemigo = Invasor(posx,100,20, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
+        enemigo1 = Invasor(posx,0,30, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
+        enemigo2 = Invasor(posx,-100,20, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
+        enemigo3 = Invasor(posx,-200,20, "Imagenes/vampiroA.png", "Imagenes/vampiroB.png")
+        
+        lista_enemigos.append(enemigo)
+        lista_enemigos.append(enemigo1)
+        lista_enemigos.append(enemigo2)
+        lista_enemigos.append(enemigo3)
+        
+        posx = posx + 300
+
 
 
 def Sobrevive_y_explora():
@@ -186,14 +213,24 @@ def Sobrevive_y_explora():
     pygame.display.set_caption("Sobrevive y explora")
     Imagen_fondo = pygame.image.load("Imagenes/Fondo_bosque_magico.png")
 
+    pygame.mixer.music.load("Sonidos/of-game-thrones-intro-remix.mp3")
+    pygame.mixer.music.play(10) #el numero es para la cantidad de veces que se va a repetir la musica
+
+    miFuenteSistema = pygame.font.SysFont("Arial",30)
+    Texto = miFuenteSistema.render("Fin del Juego", 0,(120,100,40))
+    TextoWin = miFuenteSistema.render("Superaste este nivel", 0,(120,100,40))
+
     jugador = personajePrincipal()
     cargarEnemigos()
 
     enJuego = True
+    
 
     reloj = pygame.time.Clock()
 
     while True:
+
+        
 
         # establecer frames por segundo
         reloj.tick(60)
@@ -216,12 +253,13 @@ def Sobrevive_y_explora():
                     jugador.movimientoDerecha()
 
                 elif evento.key== K_q:
+                    time.sleep(0.09)
                     x,y = jugador.rect.center
                     jugador.disparar(x -160,y-350)
                 
-                elif evento.key== K_r:
-                    x,y = jugador.rect.center
-                    jugador.dispararSuperPoder(x -160,y-350)
+                
+                elif evento.key == K_SPACE:
+                    pygame.mixer.music.fadeout(3000)
             
             
         
@@ -235,22 +273,57 @@ def Sobrevive_y_explora():
                 x.dibujarDisparo(ventana)
                 x.trayectoria()
 
-                if x.rect.top < -300:
+                if x.rect.top < -10:
                     jugador.listaDisparo.remove(x)
+                else:
+                    for enemigo in lista_enemigos:
+                        if x.rect.colliderect(enemigo.rect): 
+                            lista_enemigos.remove(enemigo)
+                            jugador.listaDisparo.remove(x)
+                            
 
         if len(lista_enemigos)>0:
             for enemigo in lista_enemigos:
                 enemigo.comportamiento(tiempo)
                 enemigo.dibujar(ventana)
 
+                if enemigo.rect.colliderect(jugador):
+                    jugador.destruccion()
+                    enJuego = False
+                    detenerTodo()
+
                 if len(enemigo.listaDisparo)>0:
                     for x in enemigo.listaDisparo:
                         x.dibujarDisparo(ventana)
                         x.trayectoria()
+                        if x.rect.colliderect(jugador.rect):
+                            jugador.destruccion()
+                            enJuego = False
+                            detenerTodo()
 
-                        if x.rect.top>300:
+                        if x.rect.top>700:
                             enemigo.listaDisparo.remove(x)
-                    
+                        else:
+                            for disparo in jugador.listaDisparo:
+                                if x.rect.colliderect(disparo.rect):
+                                    jugador.listaDisparo.remove(disparo)
+                                    if x in enemigo.listaDisparo:
+                                        enemigo.listaDisparo.remove(x)
+                                    if x not in enemigo.listaDisparo:
+                                        pass
+                
+        
+
+        if enJuego==False:
+            pygame.mixer.music.fadeout(3000)
+            ventana.blit(Texto,(300,300))
+
+        #print(len(lista_enemigos))
+
+        if len(lista_enemigos)==4:
+            pygame.mixer.music.fadeout(3000)
+            ventana.blit(TextoWin,(300,300))
+            
 
         pygame.display.update()
 
