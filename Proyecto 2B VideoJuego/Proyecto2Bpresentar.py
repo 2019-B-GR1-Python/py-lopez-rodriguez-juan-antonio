@@ -888,7 +888,6 @@ def Sobrevive_y_exploraFinal():
         pygame.display.update()
 
 
-
 #Sobrevive_y_explora()
 
 #Sobrevive_y_explora2()
