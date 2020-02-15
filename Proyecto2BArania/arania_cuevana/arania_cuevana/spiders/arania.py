@@ -1,5 +1,13 @@
 import scrapy
 
+import pandas as pd
+import numpy as np
+import os
+import sqlite3
+import xlsxwriter
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 class AraniaCuevana(scrapy.Spider):
     name = 'cuevana_spider'
 
@@ -57,7 +65,7 @@ class AraniaCuevana(scrapy.Spider):
 class AraniaCuevanaPeliculas(scrapy.Spider):
     name = 'cuevana_spider_peliculas'
 
-    #urls = ['https://cuevana3.io/20039/gisaengchung','https://cuevana3.io/26039/quien-a-hierro-mata','https://cuevana3.io/25342/whered-you-go-bernadette','https://cuevana3.io/26034/cafarnaum','https://cuevana3.io/26030/the-host','https://cuevana3.io/24388/frozen-2','https://cuevana3.io/26001/apro-mesek','https://cuevana3.io/25997/nevrland','https://cuevana3.io/25975/cuestion-de-justicia','https://cuevana3.io/25971/the-coldest-game','https://cuevana3.io/25967/birds-of-prey-and-the-fantabulous-emancipation-of-one-harley-quinn','https://cuevana3.io/25394/1917','https://cuevana3.io/24840/judy','https://cuevana3.io/21711/joker','https://cuevana3.io/15710/rocketman','https://cuevana3.io/16941/toy-story-4','https://cuevana3.io/25046/jojo-rabbit']
+    #urls = ['https://cuevana3.io/20039/gisaengchung','https://cuevana3.io/26034/cafarnaum','https://cuevana3.io/25967/birds-of-prey-and-the-fantabulous-emancipation-of-one-harley-quinn','https://cuevana3.io/25394/1917','https://cuevana3.io/24840/judy','https://cuevana3.io/21711/joker','https://cuevana3.io/15710/rocketman','https://cuevana3.io/16941/toy-story-4','https://cuevana3.io/25046/jojo-rabbit']
     
     urls = ['https://cuevana3.io/20039/gisaengchung','https://cuevana3.io/26039/quien-a-hierro-mata','https://cuevana3.io/25342/whered-you-go-bernadette','https://cuevana3.io/26034/cafarnaum','https://cuevana3.io/26030/the-host','https://cuevana3.io/24388/frozen-2','https://cuevana3.io/26001/apro-mesek','https://cuevana3.io/25997/nevrland','https://cuevana3.io/25975/cuestion-de-justicia','https://cuevana3.io/25971/the-coldest-game','https://cuevana3.io/25967/birds-of-prey-and-the-fantabulous-emancipation-of-one-harley-quinn','https://cuevana3.io/25394/1917','https://cuevana3.io/24840/judy','https://cuevana3.io/21711/joker','https://cuevana3.io/15710/rocketman','https://cuevana3.io/16941/toy-story-4',
     'https://cuevana3.io/25046/jojo-rabbit','https://cuevana3.io/25769/mujercitas','https://cuevana3.io/20423/american-factory','https://cuevana3.io/19268/once-upon-a-time-in-hollywood','https://cuevana3.io/24815/marriage-story','https://cuevana3.io/24361/ford-v-ferrari','https://cuevana3.io/25398/bombshell','https://cuevana3.io/25962/tankers','https://cuevana3.io/25954/la-befana-vien-di-notte','https://cuevana3.io/25939/timmy-failure-mistakes-were-made','https://cuevana3.io/23290/terminator-dark-fate','https://cuevana3.io/25950/pour-sama','https://cuevana3.io/25635/dolittle','https://cuevana3.io/25865/a-beautiful-day-in-the-neighborhood','https://cuevana3.io/24894/knives-out','https://cuevana3.io/22600/maleficent-mistress-of-evil','https://cuevana3.io/24910/21-bridges','https://cuevana3.io/25935/horse-girl','https://cuevana3.io/25930/dijiutianchang','https://cuevana3.io/18938/el-chicano','https://cuevana3.io/25923/waves','https://cuevana3.io/25920/asfixia','https://cuevana3.io/25916/the-great-war','https://cuevana3.io/24201/midway','https://cuevana3.io/25912/deadly-shores','https://cuevana3.io/25909/la-banda','https://cuevana3.io/25906/dos-veces-tu','https://cuevana3.io/25901/sordo','https://cuevana3.io/25897/her-worst-nightmare','https://cuevana3.io/24714/spirit-riding-free-spirit-of-christmas','https://cuevana3.io/24710/lucky-day','https://cuevana3.io/24702/before-the-frost','https://cuevana3.io/24698/3022','https://cuevana3.io/24694/the-christmas-train','https://cuevana3.io/24690/christmas-encore','https://cuevana3.io/24686/christmas-in-homestead','https://cuevana3.io/24682/arctic-justice','https://cuevana3.io/24678/a-december-bride','https://cuevana3.io/24674/a-christmas-prince-the-royal-baby','https://cuevana3.io/24670/100-cosas','https://cuevana3.io/24666/pooka','https://cuevana3.io/21329/mama-se-fue-de-viaje','https://cuevana3.io/24661/happy-endings-sleepover','https://cuevana3.io/24656/i-see-you','https://cuevana3.io/24653/warnings','https://cuevana3.io/24649/un-traductor','https://cuevana3.io/24645/extra-ordinary','https://cuevana3.io/24641/te-presento-a-sofia','https://cuevana3.io/24637/los-bando','https://cuevana3.io/24629/the-midwifes-deception','https://cuevana3.io/1818/american-wrestler-the-wizard','https://cuevana3.io/24624/the-archer',
@@ -75,24 +83,45 @@ class AraniaCuevanaPeliculas(scrapy.Spider):
     ]
     
 
+    nombres_peliculas = []
+    nombres_actores = []
+    datos_duracion = []
+    datos_anio = []
+    datos_calidad = []
+    datos_calificacion = []
+    nombre_director = []
+    datos_genero = []
+
+
+
     def start_requests(self):
         for url in self.urls:
             yield scrapy.Request(url = url)
 
     def parse(self, response):
-        titulo = response.css('h1.Title::text').extract()
+        titulo = response.css('h1.Title::text').get()
+        self.nombres_peliculas.append(titulo)
         #print(titulo)
 
         actores = response.css('.loadactor > a::text').extract()  
+        self.nombres_actores.append(actores)
         #print(actores)        
 
         #calidad = response.css('p.meta>span.Qlty::text').extract()
         duracion_anio_calidad = response.css('p.meta>span::text').extract() 
+        self.datos_duracion.append(duracion_anio_calidad[0])
+        self.datos_anio.append(duracion_anio_calidad[1])
+        self.datos_calidad.append(duracion_anio_calidad[2])
         #print(duracion_anio_calidad)
 
-        calificacion = response.css('div::attr(data-percent)').extract()
+        calificacion = response.css('div::attr(data-percent)').get()
+        self.datos_calificacion.append(calificacion)
 
-        director = response.css('span.color-w::text').extract()
+        director = response.css('span.color-w::text').get()
+        self.nombre_director.append(director)
+
+        genero = response.css('li.AAIco-adjust > a::text').get()
+        self.datos_genero.append(genero)
 
         """
         for elemento in range(len(titulo)): 
@@ -100,10 +129,10 @@ class AraniaCuevanaPeliculas(scrapy.Spider):
             for elemento2 in range(len(actores)):
                 print(actores[elemento2])
             print('\n')
-        """ 
+        """
         
         
-        
+        """
         #Guardar en archivo
         for elemento in range(len(titulo)): 
             try:
@@ -117,7 +146,46 @@ class AraniaCuevanaPeliculas(scrapy.Spider):
             except Exception as error:
                 print(f'Error:  {error}')
 
+        """
         
+        #print(lista_titulos)
+        lista_titulos = pd.Series(self.nombres_peliculas)
+        lista_actores = pd.Series(self.nombres_actores)
+        lista_duraciones = pd.Series(self.datos_duracion)
+        lista_anios = pd.Series(self.datos_anio)
+        lista_calidades = pd.Series(self.datos_calidad)
+        lista_calificaciones = pd.Series(self.datos_calificacion)
+        lista_directores = pd.Series(self.nombre_director)
+        lista_generos = pd.Series(self.datos_genero)
+
+        
+        #Guardar en Excel
+        #columnas = ['TITULO','Duracion','Anio','Calidad','Calificacion','Director','Actores']
+        #columnas = ['TITULO','Duracion']
+        path_guardado = 'C://Users//juanc//source//repos//Python//Proyecto2BArania//arania_cuevana//TODO.xlsx'
+
+        df = pd.DataFrame({'TITULO': lista_titulos,'Genero':lista_generos,'Duracion': lista_duraciones,'Anio':lista_anios,
+        'Calificacion':lista_calificaciones, 'Calidad':lista_calidades, 'Director':lista_directores, 'Actores':lista_actores })
+        #print(df)
+
+        ###  EXCEL ###
+        #writer = pd.ExcelWriter(path_guardado, engine='xlsxwriter')  #instancia de writer
+        
+        
+        df.to_excel(path_guardado, sheet_name = 'Primera', index=False) #Guardar sin los indices que estaban
+        #df.to_excel(writer, sheet_name = 'Primera',index=False, columns=columnas)
+        
+        """
+        #seleccionar solo las columnas que deseo
+        columnas = ['artist','title','year']
+        df_titulos.to_excel(path_guardado, columns = columnas)
+        df_titulos.to_excel(path_guardado, index=False,columns = columnas)
+        """
+
+
+
+
+
         
         
 
