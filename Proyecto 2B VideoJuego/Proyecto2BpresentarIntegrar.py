@@ -2,6 +2,9 @@ import pygame,sys
 from pygame.locals import *
 import time
 from random import randint
+from tkinter import *
+#import metodos
+
 
 #variables globales
 ancho = 1000
@@ -895,4 +898,71 @@ def Sobrevive_y_exploraFinal():
 
 #Sobrevive_y_explora2()
 
-Sobrevive_y_exploraFinal()
+#Sobrevive_y_exploraFinal()
+
+def interfaz():
+
+    raiz = Tk()
+    raiz.title("Menu Principal")
+    raiz.geometry("650x350")
+
+    frameInterno = Frame(raiz, width=500, height=500)
+    frameInterno.pack(fill="both", expand="true")
+    frameInterno.rowconfigure(0, weight=1)
+    frameInterno.rowconfigure(1, weight=1)
+    frameInterno.rowconfigure(2, weight=1)
+    frameInterno.rowconfigure(3, weight=1)
+    frameInterno.rowconfigure(4, weight=1)
+    frameInterno.columnconfigure(0, weight=1)
+    frameInterno.columnconfigure(1, weight=1)
+    frameInterno.columnconfigure(2, weight=1)
+
+    Label(frameInterno, text="Sobrevive y Explora", padx=10, pady=10,
+          relief="groove", bd=10).grid(row=0, columnspan=3, sticky=(N, S, W, E))
+    
+    label1 = Label(frameInterno, text="---->", padx=10, pady=10, )
+    label1.grid(row=1, column=0, sticky=(N, S, W, E))
+
+    label11 = Label(frameInterno, text="<----", padx=10, pady=10, )
+    label11.grid(row=1, column=2, sticky=(N, S, W, E))
+
+    label2 = Label(frameInterno, text="---->", padx=10, pady=10, )
+    label2.grid(row=2, column=0, sticky=(N, S, W, E))
+
+    label22 = Label(frameInterno, text="<----", padx=10, pady=10, )
+    label22.grid(row=2, column=2, sticky=(N, S, W, E))
+
+    label3 = Label(frameInterno, text="---->", padx=10, pady=10, )
+    label3.grid(row=3, column=0, sticky=(N, S, W, E))
+
+    label33 = Label(frameInterno, text="<----", padx=10, pady=10, )
+    label33.grid(row=3, column=2, sticky=(N, S, W, E))
+            
+    def ejecutarNivel1():
+        Sobrevive_y_explora()
+        
+    def ejecutarNivel2():
+        Sobrevive_y_explora2()
+        
+    def ejecutarNivelFinal():
+        Sobrevive_y_exploraFinal()
+        
+
+    botonNivel1 = Button(frameInterno, text='Nivel 1', command = ejecutarNivel1)
+    botonNivel1.grid(row=1, column=1, sticky=(N, S, W, E))
+    botonNivel1.config( relief="groove", bd=5)
+
+    botonNivel2 = Button(frameInterno, text='Nivel 2', command = ejecutarNivel1)
+    botonNivel2.grid(row=2, column=1, sticky=(N, S, W, E))
+    botonNivel2.config( relief="groove", bd=5)
+
+    botonNivelFinal = Button(frameInterno, text='Nivel Final', command = ejecutarNivel1)
+    botonNivelFinal.grid(row=3, column=1, sticky=(N, S, W, E))
+    botonNivelFinal.config( relief="groove", bd=5)
+
+    botonAtras = Button(frameInterno, text='ATRAS', command = ejecutarNivel1)
+    botonAtras.grid(row=4, columnspan = 3, sticky=(N, S, W, E))
+    botonAtras.config( relief="groove", bd=10)
+    raiz.mainloop()
+
+interfaz()
